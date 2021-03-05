@@ -1,62 +1,64 @@
 import checkers;
 
+
 class Board:
-	def __init__(self, grid):
-		self.grid = []
+    def __init__(self, grid):
+        self.grid = []
 
-		for i in range(0,8):
-			new = []
-			for j in range(0,8):
-				new.append(' ')
+        for i in range(0, 8):
+            new = []
+            for j in range(0, 8):
+                new.append(' ')
 
-			self.grid.append(new)
+            self.grid.append(new)
 
-	def mapBoard( self , u_checkers, c_checkers ):
-		#map x and y for the computer's checkers.
+    def initBoard(self, u_checkers, c_checkers):
+        # map x and y for the computer's checkers.
 
-		for i in range(0,3):
-			for j in range(0,8):
-				if ((j%2==1 and i%2==0) or (j%2==0 and i%2==1)):
-					newchecker = checkers.Vassal('c',i,j)
-					u_checkers.append(newchecker)
-					self.grid[i][j] = newchecker.getfaction()
-				else:
-					self.grid[i][j] = ' '
+        for i in range(0, 3):
+            for j in range(0, 8):
+                if ((j % 2 == 1 and i % 2 == 0) or (j % 2 == 0 and i % 2 == 1)):
+                    newchecker = checkers.Vassal('c', u_checkers, i, j)
+                    c_checkers.append(newchecker)
+                    self.grid[i][j] = newchecker.getfaction()
+                else:
+                    self.grid[i][j] = ' '
 
-		#no man's land, init.
+        # no man's land, init.
 
-		for i in range(3,5):
-			for j in range(0,8):
-				self.grid[i][j] = ' '
+        for i in range(3, 5):
+            for j in range(0, 8):
+                self.grid[i][j] = ' '
 
-		#map x and y for the user's checkers.
+        # map x and y for the user's checkers.
 
-		for i in range(5,8):
-			for j in range(0,8):
-				if ((j%2==1 and i%2==0) or (j%2==0 and i%2==1)):
-					newchecker = checkers.Vassal('u',i,j)
-					u_checkers.append(newchecker)
-					self.grid[i][j] = newchecker.getfaction()
-				else:
-					self.grid[i][j] = ' '
+        for i in range(5, 8):
+            for j in range(0, 8):
+                if ((j % 2 == 1 and i % 2 == 0) or (j % 2 == 0 and i % 2 == 1)):
+                    newchecker = checkers.Vassal('u', c_checkers, i, j)
+                    u_checkers.append(newchecker)
+                    self.grid[i][j] = newchecker.getfaction()
+                else:
+                    self.grid[i][j] = ' '
 
-	def showBoard( self ):
-		for i in self.grid:
-			for j in i:
-				print(j, end = ' ')
-			print()
-#FIXME
-	#def updateBoard( self ):
+    # FIXME base this on previous checker position and new checker position
+    def mapBoard(self, movedchecker):
+        for i in range(8):
+            for j in range(8):
+                if i == movedchecker.getrow() and j == movedchecker.getcolumn():
+                    self.grid[i][j] = movedchecker.getfaction()
 
-u_checkers = []
-c_checkers = []
+    def showBoard(self):
+        for i in range(0,9):
+            if i == 0: print('~',end=' ')
+            elif i > 0: print(i-1,end=' ')
+        print()
 
-newboard = Board([])
-newboard.mapBoard(u_checkers,c_checkers)
-newboard.showBoard()
+        counter = 0
 
-#for i in newboard.grid:
-#	for j in i:
-#		print(j, end=' ')
-
-#	print()
+        for i in self.grid:
+            print(counter,end=' ')
+            counter+=1
+            for j in i:
+                print(j, end=' ')
+            print()
